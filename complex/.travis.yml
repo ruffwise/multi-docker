@@ -15,6 +15,13 @@ after_success:
   - docker build -t ruffwise/multi-nginx ./nginx
   - docker build -t ruffwise/multi-server ./server
   - docker build -t ruffwise/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$Docker_password" | docker login -u "$Docker_ID" --password-stdin
+  #Push images to Docker repository
+  - docker push ruffwise/multi-client
+  - docker push ruffwise/multi-nginx
+  - docker push ruffwise/multi-server
+  - docker push ruffwise/multi-worker
 # deploy:
 #   provider: elasticbeanstalk
 #   region: "us-east-1"

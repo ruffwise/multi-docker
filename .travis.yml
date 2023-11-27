@@ -28,8 +28,8 @@ deploy:
   region: "us-east-1"
   app: "Multidocker"
   env: "Multidocker-env"
-  bucket_name: "elasticbeanstalk-us-east-1-923445559289"
-  bucket_path: "docker"
+  bucket_name: "elasticbeanstalk-us-east-1-169085734424"
+  bucket_path: "Multidocker"
   on:
     branch: feature
   access_key_id: $AWS_ACCESS_KEY

@@ -22,6 +22,18 @@ after_success:
   - docker push ruffwise/multi-nginx
   - docker push ruffwise/multi-server
   - docker push ruffwise/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "Multidocker"
+  env: "Multidocker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-923445559289"
+  bucket_path: "docker"
+  on:
+    branch: feature
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
 # deploy:
 #   provider: elasticbeanstalk
 #   region: "us-east-1"

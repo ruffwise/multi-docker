@@ -1,0 +1,36 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t ruffwise/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true ruffwise/react-test npm test
+
+after_success:
+  - docker build -t ruffwise/multi-client ./client
+  - docker build -t ruffwise/multi-nginx ./nginx
+  - docker build -t ruffwise/multi-server ./server
+  - docker build -t ruffwise/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$Docker_password" | docker login -u "$Docker_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push ruffwise/multi-client
+  - docker push ruffwise/multi-nginx
+  - docker push ruffwise/multi-server
+  - docker push ruffwise/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "Multidocker"
+  env: "Multidocker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-169085734424"
+  bucket_path: "Multidocker"
+  on:
+    branch: dev-features
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
